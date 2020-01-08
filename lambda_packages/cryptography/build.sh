@@ -15,7 +15,8 @@ set -e
 
 DOCKER=0
 PY2=1
-PY3=1
+PY36=1
+PY37=1
 SUDO=sudo
 
 while [[ $# -gt 2 ]]
@@ -30,12 +31,20 @@ case $key in
         ;;
     --py2-only)
         PY2=1
-        PY3=0
+        PY36=0
+        PY37=0
         shift
         ;;
-    --py3-only)
+    --py36-only)
         PY2=0
-        PY3=1
+        PY36=1
+        PY37=0
+        shift
+        ;;
+    --py37-only)
+        PY2=0
+        PY36=0
+        PY37=1
         shift
         ;;
     *)
@@ -102,6 +111,10 @@ if [ ${PY2} == 1 ]; then
     build_package ${PACKAGE} ${VERSION} python2.7 pip virtualenv
 fi
 
-if [ ${PY3} == 1 ]; then
+if [ ${PY36} == 1 ]; then
     build_package ${PACKAGE} ${VERSION} python3.6 pip3.6 "python3.6 -m venv "
+fi
+
+if [ ${PY37} == 1 ]; then
+    build_package ${PACKAGE} ${VERSION} python3.7 pip3.7 "python3.7 -m venv "
 fi
